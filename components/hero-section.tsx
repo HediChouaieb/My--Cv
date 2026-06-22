@@ -7,7 +7,7 @@ import { MagneticButton } from "./magnetic-button"
 
 export function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const mouseRef = useRef({ x: 0, y: 0 })
   const [isLoaded, setIsLoaded] = useState(false)
   const [typedText, setTypedText] = useState("")
 
@@ -29,7 +29,7 @@ export function HeroSection() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+      mouseRef.current = { x: e.clientX, y: e.clientY }
     }
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
@@ -43,96 +43,93 @@ export function HeroSection() {
     if (!ctx) return
 
     let animationFrameId: number
-    const particles: Array<{
+    let currentMouseX = 0
+    let currentMouseY = 0
+    const spacing = 15
+    const streaks: Array<{
       x: number
       y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
+      speed: number
+      length: number
+      brightness: number
     }> = []
+
+    const isDark = () => document.documentElement.classList.contains("dark")
+    const trailColor = () => (isDark() ? "rgba(0, 0, 0, 0.07)" : "rgba(255, 255, 255, 0.15)")
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
-    }
-
-    const createParticles = () => {
-      particles.length = 0
-      const particleCount = Math.floor((canvas.width * canvas.height) / 15000)
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 1.5 + 0.5,
-          opacity: Math.random() * 0.5 + 0.2,
+      const cols = Math.floor(canvas.width / spacing)
+      streaks.length = 0
+      for (let i = 0; i < cols; i++) {
+        streaks.push({
+          x: i * spacing + Math.random() * 10,
+          y: Math.random() * -canvas.height,
+          speed: 2 + Math.random() * 4,
+          length: 5 + Math.floor(Math.random() * 15),
+          brightness: 0.3 + Math.random() * 0.7,
         })
       }
     }
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const ease = 0.08
 
-      particles.forEach((particle) => {
-        const dx = mousePosition.x - particle.x
-        const dy = mousePosition.y - particle.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 120) {
-          const force = (120 - dist) / 120
-          particle.vx -= (dx / dist) * force * 0.015
-          particle.vy -= (dy / dist) * force * 0.015
+    const draw = () => {
+      currentMouseX += (mouseRef.current.x - currentMouseX) * ease
+      currentMouseY += (mouseRef.current.y - currentMouseY) * ease
+
+      const offsetX = (currentMouseX - window.innerWidth / 2) / (window.innerWidth / 2)
+      const offsetY = (currentMouseY - window.innerHeight / 2) / (window.innerHeight / 2)
+
+      ctx.fillStyle = trailColor()
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      const dark = isDark()
+
+      streaks.forEach((streak) => {
+        const x = streak.x + offsetX * 40
+        const dist = Math.hypot(currentMouseX - x, streak.y)
+        const proximity = Math.max(0, 1 - dist / 400)
+        const speed = streak.speed + proximity * 6
+        const alpha = Math.min(1, streak.brightness + proximity * 0.8)
+
+        streak.y += speed
+
+        const startY = streak.y
+        const endY = streak.y - streak.length * spacing * 0.3
+
+        for (let j = 0; j < streak.length; j++) {
+          const py = startY - j * spacing * 0.3
+          const fade = 1 - j / streak.length
+          const size = Math.max(0.5, 2.5 - j * 0.15)
+
+          ctx.beginPath()
+          ctx.arc(x, py, size, 0, Math.PI * 2)
+          ctx.fillStyle = dark
+            ? `rgba(74, 222, 128, ${alpha * fade * 0.8})`
+            : `rgba(0, 0, 0, ${alpha * fade * 0.5})`
+          ctx.fill()
         }
 
-        particle.x += particle.vx
-        particle.y += particle.vy
-        particle.vx *= 0.99
-        particle.vy *= 0.99
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
-
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(74, 222, 128, ${particle.opacity})`
-        ctx.fill()
+        if (streak.y > canvas.height + 100) {
+          streak.y = Math.random() * -50
+          streak.speed = 2 + Math.random() * 4
+        }
       })
 
-      particles.forEach((particle, i) => {
-        particles.slice(i + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-
-          if (distance < 100) {
-            const alpha = 0.1 * (1 - distance / 100)
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.strokeStyle = `rgba(74, 222, 128, ${alpha})`
-            ctx.lineWidth = 0.5
-            ctx.stroke()
-          }
-        })
-      })
-
-      animationFrameId = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(draw)
     }
 
     resizeCanvas()
-    createParticles()
-    animate()
+    draw()
 
-    window.addEventListener("resize", () => {
-      resizeCanvas()
-      createParticles()
-    })
+    window.addEventListener("resize", resizeCanvas)
 
     return () => {
       cancelAnimationFrame(animationFrameId)
     }
-  }, [mousePosition])
+  }, [])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

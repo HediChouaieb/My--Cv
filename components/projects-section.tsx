@@ -6,36 +6,39 @@ import { useIntersectionObserver } from "./use-intersection-observer"
 
 const projects = [
   {
+    title: "Automated SocialMedia Videos Studio",
+    year: "2026",
+    description:
+      "AI-powered system for automated short-form video generation (TikTok / Reels / YouTube Shorts). Features Google Gemini for script generation, Murf.ai for TTS voiceover, FFmpeg-based rendering, and Playwright for visual generation via Meta AI. TikTok API integration for direct publishing.",
+    tech: ["Next.js", "TypeScript", "Tailwind", "Gemini", "Murf.ai", "FFmpeg", "Playwright"],
+    link: "#",
+    github: "#",
+  },
+  {
+    title: "ProClimaTechnique",
+    year: "2026",
+    description:
+      "Business website for HVAC and event air conditioning rental services. Online reservation system integrated with WhatsApp for direct customer inquiries and bookings. Dynamic booking forms with automated data collection.",
+    tech: ["Next.js", "WhatsApp API", "Tailwind"],
+    link: "#",
+    github: "#",
+  },
+  {
     title: "Tidy Patterns",
-    description: "E-commerce platform for digital embroidery patterns with admin dashboard and Stripe integration.",
-    tech: ["Next.js", "Supabase", "Stripe", "Tailwind"],
-    type: "web",
+    year: "2025",
+    description:
+      "Scalable e-commerce platform for digital embroidery patterns. Implemented SSR/ISR for performance and SEO optimization. Integrated Stripe payments with webhook-based order processing.",
+    tech: ["Next.js", "Stripe", "Supabase", "Tailwind"],
     link: "https://tidydevmode.vercel.app/",
     github: "#",
   },
   {
-    title: "CyberTech Exchange",
-    description: "Cybersecurity learning platform with interactive courses and progress tracking.",
-    tech: ["Next.js", "PostgreSQL", "ShadCN"],
-    type: "web",
+    title: "Microsoft Tech Club ISET Sfax",
+    year: "2024 – 2025",
+    description:
+      "Developed event management and recruitment platforms using Next.js and Supabase. Built CyberTech Exchange, a cybersecurity learning platform with interactive courses and progress tracking.",
+    tech: ["Next.js", "Supabase", "PostgreSQL"],
     link: "https://cybertechexchange.vercel.app/",
-    github: "#",
-  },
-  {
-    title: "Café Management",
-    description: "Desktop application for order management, inventory tracking, and reporting.",
-    tech: ["Electron", "Next.js", "SQLite"],
-    type: "desktop",
-    link: "#",
-    github: "#",
-  },
-
-  {
-    title: "Car Rental Platform",
-    description: "Full-stack rental solution with real-time availability and booking system.",
-    tech: ["Next.js", "Laravel", "MySQL"],
-    type: "web",
-    link: "#",
     github: "#",
   },
 ]
@@ -63,7 +66,9 @@ export function ProjectsSection() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <h2 className="text-3xl md:text-4xl font-bold font-mono text-foreground tracking-tight">Selected Work</h2>
+          <h2 className="text-3xl md:text-4xl font-bold font-mono text-foreground tracking-tight">
+            Personal Projects <span className="text-accent">&</span> Freelance
+          </h2>
           <p className="font-mono text-sm text-muted-foreground">
             <span className="text-accent">$</span> ls -la ./projects
           </p>
@@ -88,7 +93,7 @@ export function ProjectsSection() {
                       {project.title}
                     </h3>
                     <span className="px-2 py-0.5 bg-secondary/50 rounded text-xs font-mono text-muted-foreground">
-                      {project.type}
+                      {project.year}
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3 md:mb-0 md:max-w-lg">{project.description}</p>
@@ -96,7 +101,7 @@ export function ProjectsSection() {
 
                 <div className="flex items-center gap-4">
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
+                    {project.tech.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
                         className="px-2 py-1 text-xs font-mono bg-secondary/30 text-muted-foreground rounded border border-border"
@@ -104,6 +109,11 @@ export function ProjectsSection() {
                         {tech}
                       </span>
                     ))}
+                    {project.tech.length > 4 && (
+                      <span className="px-2 py-1 text-xs font-mono bg-secondary/30 text-muted-foreground rounded border border-border">
+                        +{project.tech.length - 4}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 ml-4">
@@ -123,7 +133,6 @@ export function ProjectsSection() {
                 </div>
               </div>
 
-              {/* Hover indicator line */}
               <div
                 className={`absolute left-0 top-0 bottom-0 w-0.5 bg-accent transition-all duration-300 ${
                   hoveredIndex === index ? "opacity-100" : "opacity-0"
@@ -131,14 +140,6 @@ export function ProjectsSection() {
               />
             </div>
           ))}
-        </div>
-
-        <div
-          className={`mt-8 font-mono text-sm text-muted-foreground transition-all duration-700 delay-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <span className="text-accent">$</span> echo "More projects on GitHub..."
         </div>
       </div>
     </section>

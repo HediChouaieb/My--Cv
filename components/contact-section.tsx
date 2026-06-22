@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { Send, Github, Linkedin, Mail, Terminal, CheckCircle, Loader2 } from "lucide-react"
+import { Send, Github, Linkedin, Mail, Youtube, Facebook, Terminal, CheckCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,6 +12,8 @@ import { useIntersectionObserver } from "./use-intersection-observer"
 const socials = [
   { icon: Github, label: "github", href: "https://github.com/Hedi-Chouaieb-git" },
   { icon: Linkedin, label: "linkedin", href: "https://linkedin.com" },
+  { icon: Youtube, label: "youtube", href: "https://www.youtube.com/@MR.CyberNet" },
+  { icon: Facebook, label: "facebook", href: "https://www.facebook.com/HadiTechLab" },
   { icon: Mail, label: "email", href: "mailto:hadichouaieb20@gmail.com" },
 ]
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useIntersectionObserver } from "./use-intersection-observer"
-import { Brain, Terminal, MessageCircle, Target, Puzzle, BookOpen } from "lucide-react"
+import { Brain, Terminal, MessageCircle, Target, Puzzle, BookOpen, Youtube, Facebook, Film, Users, GraduationCap } from "lucide-react"
 
 const skillCategories = [
   {
@@ -138,6 +138,92 @@ export function SkillsSection() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+
+          <div>
+            <h3
+              className={`text-lg font-semibold text-foreground mb-6 flex items-center gap-2 transition-all duration-700 delay-200 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+            >
+              <Youtube className="w-5 h-5 text-accent" />
+              Content Creation
+            </h3>
+            <div className="space-y-4">
+              <a
+                href="https://www.youtube.com/@MR.CyberNet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex items-start gap-4 p-4 bg-card border border-border rounded-xl transition-all duration-500 hover:border-accent/50 hover:-translate-y-1 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: "300ms" }}
+              >
+                <div className="p-2 bg-secondary/30 rounded-lg group-hover:scale-110 transition-transform">
+                  <Youtube className="w-5 h-5 text-red-500" />
+                </div>
+                <div>
+                  <div className="font-medium text-foreground mb-0.5 group-hover:text-accent transition-colors">
+                    YouTube
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-1">@MR.CyberNet</div>
+                  <div className="text-sm text-muted-foreground">
+                    Cybersecurity content, pentesting tutorials & security best practices
+                  </div>
+                </div>
+              </a>
+
+              <a
+                href="https://www.facebook.com/HadiTechLab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group flex items-start gap-4 p-4 bg-card border border-border rounded-xl transition-all duration-500 hover:border-accent/50 hover:-translate-y-1 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: "400ms" }}
+              >
+                <div className="p-2 bg-secondary/30 rounded-lg group-hover:scale-110 transition-transform">
+                  <Facebook className="w-5 h-5 text-blue-500" />
+                </div>
+                <div>
+                  <div className="font-medium text-foreground mb-0.5 group-hover:text-accent transition-colors">
+                    Facebook
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-1">HadiTechLab</div>
+                  <div className="text-sm text-muted-foreground">
+                    AI, development & tech insights — sharing knowledge about modern software engineering
+                  </div>
+                </div>
+              </a>
+
+              <div
+                className={`flex items-center gap-3 p-3 bg-card border border-border rounded-xl transition-all duration-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: "500ms" }}
+              >
+                <Film className="w-4 h-4 text-accent shrink-0" />
+                <span className="text-xs text-muted-foreground">Content creator in cybersecurity & tech</span>
+              </div>
+              <div
+                className={`flex items-center gap-3 p-3 bg-card border border-border rounded-xl transition-all duration-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: "600ms" }}
+              >
+                <Users className="w-4 h-4 text-accent shrink-0" />
+                <span className="text-xs text-muted-foreground">Building a community around secure coding</span>
+              </div>
+              <div
+                className={`flex items-center gap-3 p-3 bg-card border border-border rounded-xl transition-all duration-500 ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: "700ms" }}
+              >
+                <GraduationCap className="w-4 h-4 text-accent shrink-0" />
+                <span className="text-xs text-muted-foreground">Sharing knowledge through tutorials & posts</span>
+              </div>
             </div>
           </div>
         </div>

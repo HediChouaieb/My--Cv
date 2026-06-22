@@ -1,12 +1,14 @@
 "use client"
 
-import { Github, Linkedin, Mail, ArrowUp, Terminal } from "lucide-react"
+import { Github, Linkedin, Mail, Youtube, Facebook, ArrowUp, Terminal } from "lucide-react"
 import { useIntersectionObserver } from "./use-intersection-observer"
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com", label: "github" },
+  { icon: Github, href: "https://github.com/Hedi-Chouaieb-git", label: "github" },
   { icon: Linkedin, href: "https://linkedin.com", label: "linkedin" },
-  { icon: Mail, href: "mailto:hello@hedichouaieb.com", label: "email" },
+  { icon: Youtube, href: "https://www.youtube.com/@MR.CyberNet", label: "youtube" },
+  { icon: Facebook, href: "https://www.facebook.com/HadiTechLab", label: "facebook" },
+  { icon: Mail, href: "mailto:hadichouaieb20@gmail.com", label: "email" },
 ]
 
 export function Footer() {
