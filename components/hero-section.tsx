@@ -218,7 +218,7 @@ export function HeroSection() {
               size="lg"
               className="border-border hover:border-accent/50 hover:bg-accent/5 px-8 bg-transparent backdrop-blur-sm font-mono transition-all duration-300"
             >
-              <a href="/cvHadiChouaieb.pdf" download className="flex items-center gap-2">
+              <a href="/HadiChouaieb.pdf" download className="flex items-center gap-2">
                 <Download className="w-4 h-4" />
                 download_cv
               </a>
