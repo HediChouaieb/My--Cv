@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { ExternalLink, Github, Folder, Terminal, Building2 } from "lucide-react"
-import { useIntersectionObserver } from "./use-intersection-observer"
+import { Reveal } from "./reveal"
+import { SectionLabel } from "./section-label"
 
-const internships = [
+const experiences = [
   {
-    title: "Cybersecurity & AI Engineering Intern",
+    position: "Cybersecurity & AI Engineering Intern",
     company: "Tunisian Cloud",
     year: "2026",
     description:
@@ -14,7 +13,7 @@ const internships = [
     tech: ["Go", "Python", "Angular", "PostgreSQL", "Docker", "Microservices"],
   },
   {
-    title: "Web Application Pentest Intern",
+    position: "Web Application Pentest Intern",
     company: "Doxso Technologies",
     year: "2026",
     description:
@@ -22,7 +21,7 @@ const internships = [
     tech: ["Burp Suite", "OWASP ZAP", "Kali Linux", "Metasploit"],
   },
   {
-    title: "Full Stack Developer Intern",
+    position: "Full Stack Developer Intern",
     company: "FlexiFleetTech",
     year: "2025",
     description:
@@ -30,8 +29,8 @@ const internships = [
     tech: ["Next.js", "Laravel", "MySQL", "REST APIs"],
   },
   {
-    title: "WordPress Developer Intern",
-    company: "Vision Software & Services, Sfax",
+    position: "WordPress Developer Intern",
+    company: "Vision Software & Services",
     year: "2024",
     description:
       "Developed a custom WordPress plugin integrating AI-powered content generation capabilities. Implemented automated page content creation using AI APIs. Participated in plugin testing, debugging, and deployment.",
@@ -40,85 +39,63 @@ const internships = [
 ]
 
 export function InternshipsSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [ref, isVisible] = useIntersectionObserver<HTMLElement>({ threshold: 0.1 })
-
   return (
-    <section id="internships" ref={ref} className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-dot-pattern opacity-20" />
-
-      <div className="max-w-6xl mx-auto px-6 relative">
-        <div
-          className={`flex items-center gap-3 mb-4 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-          }`}
-        >
-          <Terminal className="w-4 h-4 text-accent" />
-          <span className="font-mono text-sm text-accent">~/internships</span>
+    <section id="experience" className="py-24 md:py-32 bg-background scroll-mt-16">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="mb-16">
+          <Reveal>
+            <SectionLabel index="03" label="Experience" />
+          </Reveal>
+          <Reveal delay={80}>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+              Where I&apos;ve Worked
+            </h2>
+          </Reveal>
         </div>
 
-        <div
-          className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12 transition-all duration-700 delay-100 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold font-mono text-foreground tracking-tight">
-            Internship <span className="text-accent">Experience</span>
-          </h2>
-          <p className="font-mono text-sm text-muted-foreground">
-            <span className="text-accent">$</span> cat internships.log
-          </p>
-        </div>
+        <div className="relative">
+          <div className="absolute left-0 md:left-8 top-0 bottom-0 w-px bg-border" />
 
-        <div className="space-y-4">
-          {internships.map((internship, index) => (
-            <div
-              key={internship.title}
-              className={`group relative bg-card border border-border rounded-lg p-6 transition-all duration-500 hover:border-accent/50 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${200 + index * 100}ms` }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Building2 className="w-5 h-5 text-accent" />
-                    <h3 className="text-lg font-mono font-semibold text-foreground group-hover:text-accent transition-colors">
-                      {internship.title}
-                    </h3>
-                    <span className="px-2 py-0.5 bg-secondary/50 rounded text-xs font-mono text-muted-foreground">
-                      {internship.year}
-                    </span>
+          <div className="space-y-0">
+            {experiences.map((exp, index) => (
+              <Reveal key={exp.company} delay={index * 100}>
+                <div className="flex items-start gap-6 md:gap-10">
+                  <div className="relative flex-shrink-0 w-0 md:w-16 pt-6">
+                    <div className="hidden md:block absolute left-0 top-7 w-3 h-3 rounded-full border-2 border-foreground bg-background" />
                   </div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs font-mono text-accent">@ {internship.company}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3 md:mb-0 md:max-w-lg">{internship.description}</p>
-                </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    {internship.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 text-xs font-mono bg-secondary/30 text-muted-foreground rounded border border-border"
-                      >
-                        {tech}
+                  <div className="flex-1 py-6 border-b border-border">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-3">
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground">
+                          {exp.position}
+                        </h3>
+                        <p className="text-muted-foreground">{exp.company}</p>
+                      </div>
+                      <span className="text-sm text-muted-foreground/60 shrink-0">
+                        {exp.year}
                       </span>
-                    ))}
+                    </div>
+
+                    <p className="text-muted-foreground leading-relaxed max-w-2xl mb-4">
+                      {exp.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2">
+                      {exp.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 rounded-full bg-secondary text-sm text-muted-foreground"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div
-                className={`absolute left-0 top-0 bottom-0 w-0.5 bg-accent transition-all duration-300 ${
-                  hoveredIndex === index ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            </div>
-          ))}
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
