@@ -140,7 +140,7 @@ export function SkillsSection() {
                   <div className="font-medium text-sm text-foreground mb-0.5">Facebook</div>
                   <div className="text-xs text-muted-foreground mb-1">HadiTechLab</div>
                   <div className="text-xs text-muted-foreground">
-                    AI, development &amp; tech insights — sharing knowledge about modern software engineering
+                    AI, development &amp; tech insights. Sharing knowledge about modern software engineering
                   </div>
                 </div>
               </a>

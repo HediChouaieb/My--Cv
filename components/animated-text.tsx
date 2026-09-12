@@ -10,12 +10,13 @@ interface AnimatedTextProps {
 }
 
 export function AnimatedText({ text, className = "", delay = 0, as: Component = "span" }: AnimatedTextProps) {
-  const [ref, isVisible] = useIntersectionObserver<HTMLElement>({ threshold: 0.1 })
+  const [ref, isVisible] = useIntersectionObserver<HTMLSpanElement>({ threshold: 0.1 })
 
   const words = text.split(" ")
 
   return (
-    <Component ref={ref} className={`inline-block ${className}`}>
+    <Component className={`inline-block ${className}`}>
+      <span ref={ref} className="inline-block">
       {words.map((word, wordIndex) => (
         <span key={wordIndex} className="inline-block overflow-hidden mr-[0.25em]">
           <span
@@ -30,6 +31,7 @@ export function AnimatedText({ text, className = "", delay = 0, as: Component = 
           </span>
         </span>
       ))}
+      </span>
     </Component>
   )
 }

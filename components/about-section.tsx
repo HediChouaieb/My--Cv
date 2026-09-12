@@ -54,7 +54,7 @@ export function AboutSection() {
             >
               I&apos;m a full stack developer who writes code that&apos;s both secure
               and scalable. With experience in penetration testing and OWASP
-              methodologies, I build applications that don&apos;t just work — they&apos;re
+              methodologies, I build applications that don&apos;t just work. They&apos;re
               built to withstand real-world threats.
             </p>
 
@@ -65,7 +65,7 @@ export function AboutSection() {
             >
               From production-grade Next.js applications to security audits, I
               focus on the intersection of great user experience and robust
-              security — without compromising on performance or maintainability.
+              security, without compromising on performance or maintainability.
             </p>
 
             <div className="space-y-4 mb-8">
