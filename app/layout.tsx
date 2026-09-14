@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { JetBrains_Mono, Manrope } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { VisitorTracker } from "@/components/visitor-tracker"
 import "./globals.css"
 
 const jetbrainsMono = JetBrains_Mono({
@@ -49,6 +50,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${manrope.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
+        <VisitorTracker />
         <Analytics />
       </body>
     </html>

@@ -2,3 +2,9 @@ node_modules/
 .next/
 *.tsbuildinfo
 next-env.d.ts
+
+# environment variables / secrets
+.env
+.env*.local
+.env.development
+.env.production

@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Download, ArrowDown, Github, Linkedin, Mail } from "lucide-react"
 
 const quickLinks = [
-  { icon: Github, label: "GitHub", href: "https://github.com/Hedi-Chouaieb-git" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
+  { icon: Github, label: "GitHub", href: "https://github.com/HediChouaieb" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/hadichouaieb/" },
   { icon: Mail, label: "Email", href: "mailto:hadichouaieb20@gmail.com" },
 ]
 

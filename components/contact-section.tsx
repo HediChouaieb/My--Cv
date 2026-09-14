@@ -11,8 +11,8 @@ import { useIntersectionObserver } from "./use-intersection-observer"
 import { SectionLabel } from "./section-label"
 
 const socials = [
-  { icon: Github, label: "GitHub", href: "https://github.com/Hedi-Chouaieb-git" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
+  { icon: Github, label: "GitHub", href: "https://github.com/HediChouaieb" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/hadichouaieb/" },
   { icon: Youtube, label: "YouTube", href: "https://www.youtube.com/@MR.CyberNet" },
   { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/HadiTechLab" },
   { icon: Mail, label: "Email", href: "mailto:hadichouaieb20@gmail.com" },
