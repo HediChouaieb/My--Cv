@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer"
 
-const GMAIL_USER = process.env.GMAIL_USER || ""
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || ""
+const USER = process.env.GMAIL_USER || ""
+const PASS = process.env.GMAIL_APP_PASSWORD || ""
+const TO = process.env.NOTIFY_TO_EMAIL || "hadichouaieb20@gmail.com"
 
 export interface VisitPayload {
   url: string
@@ -16,10 +17,39 @@ export interface VisitPayload {
 }
 
 export function hasCredentials() {
-  return Boolean(GMAIL_USER && GMAIL_APP_PASSWORD)
+  return Boolean(USER && PASS)
 }
 
-export function getUserAgentInfo(raw: string | null) {
+export function buildEmailBody(payload: VisitPayload) {
+  const lines = [
+    "Your portfolio was just visited.",
+    "",
+    "=== Details ===",
+    `Full URL    : ${payload.url}`,
+    `Page        : ${payload.pathname}`,
+    `Visitor IP  : ${payload.ip}`,
+    `Device      : ${payload.os} (${payload.browser})`,
+    `User Agent  : ${payload.ua}`,
+    `Referrer    : ${payload.referrer}`,
+    `Time        : ${payload.timestamp}`,
+    "",
+    "URL Parameters:",
+  ]
+
+  if (Object.keys(payload.params).length) {
+    for (const [key, value] of Object.entries(payload.params)) {
+      lines.push(`  ${key} = ${value}`)
+    }
+  } else {
+    lines.push("  none found")
+  }
+
+  return lines.join("\n")
+}
+
+export function parseUserAgent(
+  raw: string | null
+): { ua: string; browser: string; os: string } {
   const ua = raw || "Unknown"
   let browser = "Unknown"
   let os = "Unknown"
@@ -66,86 +96,6 @@ export function nowUtc() {
   })
 }
 
-export function buildEmailText(payload: VisitPayload) {
-  const paramsText = Object.keys(payload.params).length
-    ? Object.entries(payload.params)
-        .map(([key, value]) => `  · ${key} = ${value}`)
-        .join("\n")
-    : "  · none found"
-
-  return [
-    `🔥 Your portfolio was just visited!`,
-    ``,
-    `====================================`,
-    ``,
-    `Full URL    : ${payload.url}`,
-    `Page        : ${payload.pathname || " / "}`,
-    `Visitor IP  : ${payload.ip}`,
-    `Device      : ${payload.os} (${payload.browser})`,
-    `User Agent  : ${payload.ua}`,
-    `Referrer    : ${payload.referrer || "None"}`,
-    `Time        : ${payload.timestamp}`,
-    ``,
-    `URL Parameters:`,
-    paramsText,
-    ``,
-    `====================================`,
-  ].join("\n")
-}
-
-export async function sendNotification(payload: VisitPayload) {
-  if (!hasCredentials()) {
-    throw new Error("SMTP credentials not configured")
-  }
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_APP_PASSWORD,
-    },
-    connectionTimeout: 10_000,
-    greetingTimeout: 5_000,
-    socketTimeout: 10_000,
-  })
-
-  const mailOptions = {
-    from: `"Portfolio Tracker" <${GMAIL_USER}>`,
-    to: "hadichouaieb20@gmail.com",
-    subject: `🔔 New visitor — your portfolio was opened${payload.pathname === " / " ? "" : ` (${payload.pathname})`}`,
-    text: buildEmailText(payload),
-  }
-
-  const maxRetries = 3
-  let lastError: Error | null = null
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const info = await transporter.sendMail(mailOptions)
-      console.log(
-        "[notify] Delivered:",
-        JSON.stringify({
-          messageId: info.messageId,
-          accepted: info.accepted,
-          rejected: info.rejected,
-        })
-      )
-      return
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error))
-      console.error(
-        `[notify] Attempt ${attempt}/${maxRetries} failed:`,
-        lastError.message
-      )
-      if (attempt < maxRetries) {
-        await new Promise((r) => setTimeout(r, 1000 * attempt))
-      }
-    }
-  }
-
-  throw lastError
-}
-
 export function buildPayloadFromRequest(
   request: Request,
   url: string,
@@ -158,7 +108,9 @@ export function buildPayloadFromRequest(
     request.headers.get("x-real-ip") ||
     ""
   const ip = forwarded.split(",")[0].trim()
-  const { ua, browser, os } = getUserAgentInfo(request.headers.get("user-agent"))
+  const { ua, browser, os } = parseUserAgent(
+    request.headers.get("user-agent")
+  )
 
   return {
     url,
@@ -171,4 +123,25 @@ export function buildPayloadFromRequest(
     timestamp: nowUtc(),
     params,
   }
+}
+
+export async function sendEmail(payload: VisitPayload) {
+  if (!hasCredentials()) {
+    throw new Error("SMTP credentials not configured")
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: USER, pass: PASS },
+  })
+
+  const body = buildEmailBody(payload)
+  const subject = `New visitor (${payload.pathname})`
+
+  await transporter.sendMail({
+    from: `"Portfolio Tracker" <${USER}>`,
+    to: TO,
+    subject,
+    text: body,
+  })
 }

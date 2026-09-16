@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import {
   buildPayloadFromRequest,
   hasCredentials,
-  sendNotification,
+  sendEmail,
 } from "@/lib/notify"
 
 export const runtime = "nodejs"
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       params
     )
 
-    await sendNotification(payload)
+    await sendEmail(payload)
 
     return NextResponse.json({ ok: true })
   } catch (error) {
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
       params
     )
 
-    await sendNotification(payload)
+    await sendEmail(payload)
 
     return NextResponse.json({ ok: true })
   } catch (error) {
