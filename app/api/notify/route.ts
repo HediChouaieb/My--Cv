@@ -189,7 +189,7 @@ export async function GET(request: Request) {
 
     const payload = buildPayloadFromRequest(
       request,
-      searchParams.get("page") || request.referrer || "Unknown",
+      searchParams.get("page") || request.headers.get("referer") || "Unknown",
       searchParams.get("pathname") || " / ",
       searchParams.get("referrer") || "",
       params
