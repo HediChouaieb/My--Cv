@@ -33,10 +33,18 @@ export function VisitorTracker() {
       }),
       keepalive: true,
     })
-      .catch((error) => {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Visit notification failed:", error)
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = await res.json().catch(() => null)
+          console.warn(
+            "[tracker] Notification failed:",
+            res.status,
+            body?.detail || body?.error || res.statusText
+          )
         }
+      })
+      .catch((error) => {
+        console.warn("[tracker] Notification request failed:", error)
       })
 
     try {

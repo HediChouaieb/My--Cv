@@ -92,6 +92,9 @@ async function sendNotification(payload: VisitPayload) {
       user: GMAIL_USER,
       pass: GMAIL_APP_PASSWORD,
     },
+    connectionTimeout: 10_000,
+    greetingTimeout: 5_000,
+    socketTimeout: 10_000,
   })
 
   const mailOptions = {
@@ -101,7 +104,26 @@ async function sendNotification(payload: VisitPayload) {
     text: buildEmailText(payload),
   }
 
-  await transporter.sendMail(mailOptions)
+  const maxRetries = 3
+  let lastError: Error | null = null
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await transporter.sendMail(mailOptions)
+      return
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error))
+      console.error(
+        `[notify] Attempt ${attempt}/${maxRetries} failed:`,
+        lastError.message
+      )
+      if (attempt < maxRetries) {
+        await new Promise((r) => setTimeout(r, 1000 * attempt))
+      }
+    }
+  }
+
+  throw lastError
 }
 
 function buildPayloadFromRequest(
@@ -162,9 +184,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true })
   } catch (error) {
-    console.error("Notification failed:", error)
+    const message = error instanceof Error ? error.message : String(error)
+    console.error("[notify] POST failed:", message)
     return NextResponse.json(
-      { error: "Failed to send notification" },
+      { error: "Failed to send notification", detail: message },
       { status: 500 }
     )
   }
@@ -199,9 +222,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ ok: true })
   } catch (error) {
-    console.error("Notification failed:", error)
+    const message = error instanceof Error ? error.message : String(error)
+    console.error("[notify] GET failed:", message)
     return NextResponse.json(
-      { error: "Failed to send notification" },
+      { error: "Failed to send notification", detail: message },
       { status: 500 }
     )
   }
