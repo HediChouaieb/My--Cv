@@ -6,6 +6,8 @@ export function VisitorTracker() {
   useEffect(() => {
     if (typeof window === "undefined") return
 
+    if (window.location.pathname === "/info") return
+
     const trackingKey = "visit-tracked"
     let tracked = false
     try {

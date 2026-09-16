@@ -121,7 +121,15 @@ export async function sendNotification(payload: VisitPayload) {
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await transporter.sendMail(mailOptions)
+      const info = await transporter.sendMail(mailOptions)
+      console.log(
+        "[notify] Delivered:",
+        JSON.stringify({
+          messageId: info.messageId,
+          accepted: info.accepted,
+          rejected: info.rejected,
+        })
+      )
       return
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
