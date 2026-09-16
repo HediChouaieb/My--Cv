@@ -96,7 +96,7 @@ async function sendNotification(payload: VisitPayload) {
 
   const mailOptions = {
     from: `"Portfolio Tracker" <${GMAIL_USER}>`,
-    to: GMAIL_USER,
+    to: "hadichouaieb20@gmail.com",
     subject: `🔔 New visitor — your portfolio was opened${payload.pathname === " / " ? "" : ` (${payload.pathname})`}`,
     text: buildEmailText(payload),
   }
